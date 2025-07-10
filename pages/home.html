@@ -7,5 +7,32 @@
 <body>
   <h1>Welcome to the Home Page!</h1>
   <p>You are now logged in.</p>
+
+  <script>
+    // Get the JWT from localStorage
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      // No token? Redirect to login
+      window.location.href = "login.html";
+    } else {
+      // Optionally, verify token with backend
+      fetch("http://127.0.0.1:8000/protected", {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      })
+      .then(res => {
+        if (!res.ok) {
+          // Token invalid or expired → redirect
+          window.location.href = "login.html";
+        }
+      })
+      .catch(() => {
+        window.location.href = "login.html";
+      });
+    }
+  </script>
 </body>
 </html>
